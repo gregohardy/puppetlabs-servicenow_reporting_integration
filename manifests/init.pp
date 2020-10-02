@@ -27,12 +27,12 @@ class servicenow_reporting_integration (
   Optional[String[1]] $assigned_to                                                                     = undef,
   Optional[Servicenow_reporting_integration::IncidentCreationConditions] $incident_creation_conditions = undef,
   # PARAMETERS SPECIFIC TO EVENT_MANAGEMENT
-  Optional[Integer] $failures_event_severity                                                           = undef,
-  Optional[Integer] $corrective_changes_event_severity                                                 = undef,
-  Optional[Integer] $intentional_changes_event_severity                                                = undef,
-  Optional[Integer] $pending_corrective_changes_event_severity                                         = undef,
-  Optional[Integer] $pending_intentional_changes_event_severity                                        = undef,
-  Optional[Integer] $no_changes_event_severity                                                         = undef,
+  Optional[String[1]] $failures_event_severity                                                           = undef,
+  Optional[String[1]] $corrective_changes_event_severity                                                 = undef,
+  Optional[String[1]] $intentional_changes_event_severity                                                = undef,
+  Optional[String[1]] $pending_corrective_changes_event_severity                                         = undef,
+  Optional[String[1]] $pending_intentional_changes_event_severity                                        = undef,
+  Optional[String[1]] $no_changes_event_severity                                                         = undef,
 ) {
   if (($user or $password) and $oauth_token) {
     fail('please specify either user/password or oauth_token not both.')
