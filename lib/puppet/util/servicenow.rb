@@ -138,32 +138,23 @@ module Puppet::Util::Servicenow
   end
   module_function :calculate_event_conditions
 
-  def event_security_string(event_security_string)
-    security_settings = {
-      'Clear' => 0,
+  def event_severity_value(event_severity_string)
+    severity_settings = {
+      'Clear'    => 0,
       'Critical' => 1,
-      'Major' => 2,
-      'Minor' => 3,
-      'Warning' => 4,
-      'OK' => 5,
+      'Major'    => 2,
+      'Minor'    => 3,
+      'Warning'  => 4,
+      'OK'       => 5,
     }
-    severity = security_settings[event_security_string]
-    raise Puppet::Error, "servicenow report severity=#{event_security_string} invalid" unless severity
-    severity
+    severity_settings[event_severity_string]
   end
 
   def calculate_event_severity(resource_statuses, settings_hash)
-    # https://docs.servicenow.com/bundle/paris-it-operations-management/page/product/event-management-operator/concept/operator-events-alerts.html
-    # 0 => Clear....(The alert no longer needs action.)
-    # 1 => Critical.(The resource is either not functional or critical problems are imminent.)
-    # 2 => Major....(Major functionality is severely impaired or performance has degraded.)
-    # 3 => Minor....(Partial, non-critical loss of functionality or performance degradation occurred.)
-    # 4 => Warning..(Attention is required, even though the resource is still functional.)
-    # 5 => OK.......(No severity. An alert is created. The resource is still functional.)
     event_conditions = calculate_event_conditions(resource_statuses)
     # return no_changes_event_severity in the case that there are no changes
-    return event_security_string(settings_hash['no_changes_event_severity']) unless event_conditions.values.any?
-    event_security_string(event_conditions.select { |_, exists| exists == true }
+    return event_severity_value(settings_hash['no_changes_event_severity']) unless event_conditions.values.any?
+    event_severity_value(event_conditions.select { |_, exists| exists == true }
                     .map { |condition, _| settings_hash[condition + '_event_severity'] }.sort.first)
   end
   module_function :calculate_event_severity
